@@ -1,15 +1,18 @@
-FROM ubuntu:17.04
+FROM ubuntu:14.04
 
 MAINTAINER k0nsl <i.am@k0nsl.org>
 
-RUN apt-get update -y &&\
-    apt-get upgrade -y &&\
-    apt-get dist-upgrade -y &&\
-    apt-get install systemd software-properties-common python-software-properties -y &&\
+RUN locale-gen en_US en_US.UTF-8 &&\
+    dpkg-reconfigure locales &&\
+    ln -sf /usr/share/zoneinfo/UTC /etc/localtime &&\
+    apt-get update -q &&\
+    apt-get upgrade -y -q &&\
+    apt-get dist-upgrade -y -q &&\
+    apt-get install -y software-properties-common python-software-properties &&\
     add-apt-repository ppa:pritunl/ppa &&\
-    apt-get update -y &&\
-    apt-get install pritunl -y &&\
-    apt-get clean all &&\
+    apt-get update -q &&\
+    apt-get install -y pritunl &&\
+    apt-get clean &&\
     apt-get -y -q autoclean &&\
     apt-get -y -q autoremove &&\
     rm -rf /tmp/*
