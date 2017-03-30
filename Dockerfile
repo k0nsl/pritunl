@@ -1,28 +1,29 @@
-FROM ubuntu:14.04
-
+FROM centos:latest
 MAINTAINER k0nsl <i.am@k0nsl.org>
 
-RUN locale-gen en_US en_US.UTF-8 &&\
-    dpkg-reconfigure locales &&\
-    ln -sf /usr/share/zoneinfo/UTC /etc/localtime &&\
-    apt-get update -q &&\
-    apt-get upgrade -y -q &&\
-    apt-get dist-upgrade -y -q &&\
-    apt-get install -y software-properties-common python-software-properties &&\
-    add-apt-repository ppa:pritunl/ppa &&\
-    apt-get update -q &&\
-    apt-get install -y pritunl &&\
-    apt-get clean &&\
-    apt-get -y -q autoclean &&\
-    apt-get -y -q autoremove &&\
-    rm -rf /tmp/*
+# initial upgrade (+ dependencies installation)
+RUN yum upgrade -y && yum install -y epel-release openssl
 
-ADD start-pritunl /bin/start-pritunl
+# add Pritunl repository
+COPY pritunl.repo /etc/yum.repos.d/pritunl.repo
+RUN gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys CF8E292A
+RUN gpg --armor --export CF8E292A > key.tmp; rpm --import key.tmp; rm -f key.tmp
 
-EXPOSE 9700
-EXPOSE 1194
-EXPOSE 11194
+# install Pritunl + MongoDB server
+RUN yum install -y pritunl mongodb-server
 
-ENTRYPOINT ["/bin/start-pritunl"]
+# use predefined Pritunl config for local MongoDB server
+COPY pritunl.conf /etc/pritunl.conf
 
-CMD ["/usr/bin/tail", "-f","/var/log/pritunl.log"]
+# support files
+COPY pritunl.sh /usr/local/bin/pritunl.sh
+RUN chmod +x /usr/local/bin/pritunl.sh
+
+# cleanup
+RUN yum clean all
+RUN rm -rf /var/tmp/* /tmp/*
+
+# meta
+CMD /usr/local/bin/pritunl.sh
+EXPOSE 1194/udp 1194/tcp 443/tcp
+VOLUME /var/lib/mongodb /var/lib/pritunl
