@@ -2,16 +2,17 @@ FROM ubuntu:17.04
 
 MAINTAINER k0nsl <i.am@k0nsl.org>
 
-RUN apt-get update -q &&\
-    apt-get upgrade -y -q &&\
-    apt-get dist-upgrade -y -q &&\
-    apt-get install -y systemd software-properties-common python-software-properties &&\
+RUN apt-get update -y &&\
+    apt-get upgrade -y &&\
+    apt-get dist-upgrade -y &&\
+    apt-get install systemd software-properties-common python-software-properties -y &&\
     add-apt-repository ppa:pritunl/ppa &&\
-    apt-get update -q &&\
-    apt-get install -y pritunl &&\
+    apt-get update -y &&\
+    apt-get install pritunl -y &&\
     apt-get clean all &&\
     apt-get -y -q autoclean &&\
     apt-get -y -q autoremove &&\
+    rm -rf /tmp/*
 
 ADD start-pritunl /bin/start-pritunl
 
