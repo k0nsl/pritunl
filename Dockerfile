@@ -3,8 +3,8 @@ FROM debian:jessie
 MAINTAINER k0nsl <i.am@k0nsl.org>
 
 RUN locale-gen en_US en_US.UTF-8 &&\
-    dpkg-reconfigure locales &&\
-    ln -sf /usr/share/zoneinfo/UTC /etc/localtime &&\
+    #dpkg-reconfigure locales &&\
+    #ln -sf /usr/share/zoneinfo/UTC /etc/localtime &&\
     apt-get update -q &&\
     apt-get upgrade -y -q &&\
     apt-get dist-upgrade -y -q &&\
