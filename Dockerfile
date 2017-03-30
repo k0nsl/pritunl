@@ -5,7 +5,11 @@ MAINTAINER k0nsl <i.am@k0nsl.org>
 RUN yum upgrade -y && yum install -y epel-release openssl
 
 # add Pritunl repository
-COPY pritunl.repo /etc/yum.repos.d/pritunl.repo
+RUN echo "[pritunl]" >> /etc/yum.repos.d/pritunl.repo
+RUN echo "name=Pritunl Repository" >> /etc/yum.repos.d/pritunl.repo
+RUN echo "baseurl=https://repo.pritunl.com/stable/yum/centos/7/" >> /etc/yum.repos.d/pritunl.repo
+RUN echo "gpgcheck=1" >> /etc/yum.repos.d/pritunl.repo
+RUN echo "enabled=1" >> /etc/yum.repos.d/pritunl.repo
 RUN gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys CF8E292A
 RUN gpg --armor --export CF8E292A > key.tmp; rpm --import key.tmp; rm -f key.tmp
 
