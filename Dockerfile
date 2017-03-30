@@ -17,7 +17,6 @@ RUN apt-get update -q &&\
     apt-get clean all &&\
     apt-get -y -q autoclean &&\
     apt-get -y -q autoremove &&\
-    rm -rf /tmp/*
 
 ADD start-pritunl /bin/start-pritunl
 
