@@ -3,12 +3,10 @@ FROM debian:jessie
 MAINTAINER k0nsl <i.am@k0nsl.org>
 
 RUN locale-gen en_US en_US.UTF-8 &&\
-    #dpkg-reconfigure locales &&\
-    #ln -sf /usr/share/zoneinfo/UTC /etc/localtime &&\
     apt-get update -q &&\
     apt-get upgrade -y -q &&\
     apt-get dist-upgrade -y -q &&\
-    apt-get install -y software-properties-common python-software-properties &&\
+    apt-get install -y systemd software-properties-common python-software-properties &&\
     echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.2 main" >> /etc/apt/sources.list.d/mongodb-org-3.2.list &&\
     echo "deb http://repo.pritunl.com/stable/apt jessie main" >> /etc/apt/sources.list.d/pritunl.list &&\
     apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 42F3E95A2C4F08279C4960ADD68FA50FEA312927 &&\
