@@ -2,8 +2,7 @@ FROM debian:jessie
 
 MAINTAINER k0nsl <i.am@k0nsl.org>
 
-RUN locale-gen en_US en_US.UTF-8 &&\
-    apt-get update -q &&\
+RUN apt-get update -q &&\
     apt-get upgrade -y -q &&\
     apt-get dist-upgrade -y -q &&\
     apt-get install -y systemd software-properties-common python-software-properties &&\
